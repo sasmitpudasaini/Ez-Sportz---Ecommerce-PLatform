@@ -1,0 +1,255 @@
+{% extends "products/base.html" %} {% block content %}
+<div
+  class="hero-section text-center py-5"
+  style="
+    background: linear-gradient(135deg, #121212 0%, #1f1f1f 100%);
+    color: white;
+    border-bottom: 5px solid #ff3c38;
+  "
+>
+  <div class="container">
+    <h1
+      class="display-3 fw-black italic"
+      style="font-weight: 900; font-style: italic; text-transform: uppercase"
+    >
+      Fuel Your Game
+    </h1>
+    <p
+      class="lead text-uppercase tracking-wider"
+      style="letter-spacing: 2px; color: #ff3c38; font-weight: bold"
+    >
+      Professional Grade Equipment for Every Athlete
+    </p>
+  </div>
+</div>
+
+<div class="category-nav-wrapper mt-n3">
+  <div class="container">
+    <div class="d-flex justify-content-center flex-wrap gap-2">
+      <a
+        href="/"
+        class="cat-tab {% if not request.GET.category %}active{% endif %}"
+      >
+        <span class="cat-text">All Gear</span>
+      </a>
+      <a
+        href="/?category=Apparel"
+        class="cat-tab {% if request.GET.category == 'Apparel' %}active{% endif %}"
+      >
+        <span class="cat-text">Apparel</span>
+      </a>
+      <a
+        href="/?category=Footwear"
+        class="cat-tab {% if request.GET.category == 'Footwear' %}active{% endif %}"
+      >
+        <span class="cat-text">Footwear</span>
+      </a>
+      <a
+        href="/?category=Equipment"
+        class="cat-tab {% if request.GET.category == 'Equipment' %}active{% endif %}"
+      >
+        <span class="cat-text">Equipment</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  {% if request.GET.q or request.GET.category %}
+  <div
+    class="d-flex justify-content-between align-items-center bg-white shadow-sm p-3 border-start border-4 border-danger mb-4"
+  >
+    <p class="mb-0 text-uppercase fw-bold small">
+      <span class="text-muted">Filtering:</span>
+      {% if request.GET.category %}<span class="text-danger mx-1"
+        >{{ request.GET.category }}</span
+      >{% endif %} {% if request.GET.q %}<span class="text-dark"
+        >"{{ request.GET.q }}"</span
+      >{% endif %}
+      <span class="badge bg-light text-dark ms-2 border"
+        >{{ products|length }} Items</span
+      >
+    </p>
+    <a
+      href="/"
+      class="btn btn-sm btn-link text-danger fw-bold text-decoration-none text-uppercase"
+      style="font-size: 0.7rem"
+      >Reset All</a
+    >
+  </div>
+  {% endif %}
+
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div
+        class="card h-100 border-0 shadow-sm position-relative product-card overflow-hidden"
+      >
+        {% if product.is_featured %}
+        <div class="pro-label">PRO CHOICE</div>
+        {% endif %}
+
+        <a href="{% url 'product_detail' product.pk %}" class="img-wrapper">
+          {% if product.image %}
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            alt="{{ product.name }}"
+            style="height: 280px; object-fit: contain; padding: 25px"
+          />
+          {% else %}
+          <div
+            class="bg-light text-center d-flex align-items-center justify-content-center"
+            style="height: 280px"
+          >
+            <span class="text-muted text-uppercase small fw-bold"
+              >Image Coming Soon</span
+            >
+          </div>
+          {% endif %}
+        </a>
+
+        <div class="card-body d-flex flex-column bg-white pt-0">
+          <h5 class="card-title text-uppercase fw-black mb-1">
+            <a
+              href="{% url 'product_detail' product.pk %}"
+              class="text-decoration-none text-dark hover-red"
+            >
+              {{ product.name }}
+            </a>
+          </h5>
+
+          <div class="mb-3">
+            <span class="category-tag">{{ product.category }}</span>
+          </div>
+
+          <p class="card-text text-muted small flex-grow-1 border-start ps-2">
+            {{ product.description|truncatewords:12 }}
+          </p>
+
+          <div
+            class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top"
+          >
+            <span class="h4 mb-0 fw-black">${{ product.price }}</span>
+
+            {% if user.is_authenticated %}
+            <div class="btn-group">
+              <a
+                href="{% url 'cart:add_to_cart' product.id %}"
+                class="btn btn-sm btn-outline-dark fw-bold text-uppercase px-3"
+                >Add</a
+              >
+              <button class="btn btn-sm btn-danger fw-bold text-uppercase px-3">
+                Buy
+              </button>
+            </div>
+            {% else %}
+            <a
+              href="{% url 'account_login' %}?next={{ request.path }}"
+              class="btn btn-sm btn-danger fw-bold text-uppercase px-3"
+              >Login</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <i
+        class="bi bi-shield-exclamation text-muted"
+        style="font-size: 3rem"
+      ></i>
+      <h4 class="text-muted mt-3 text-uppercase fw-bold">Locker Room Empty</h4>
+      <a href="/" class="btn btn-danger text-uppercase fw-bold px-4 mt-3"
+        >Browse All Gear</a
+      >
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  /* Category Navigation Styling */
+  .category-nav-wrapper {
+    position: relative;
+    z-index: 100;
+    margin-top: -25px; /* Pulls it up into the hero section */
+  }
+
+  .cat-tab {
+    background: #fff;
+    color: #121212;
+    padding: 12px 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 800;
+    font-style: italic;
+    transform: skewX(-15deg); /* The Slant */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .cat-text {
+    display: inline-block;
+    transform: skewX(
+      15deg
+    ); /* Reverse the slant for the text so it's readable */
+  }
+
+  .cat-tab:hover {
+    background: #ff3c38;
+    color: #fff;
+    transform: skewX(-15deg) translateY(-3px);
+  }
+
+  .cat-tab.active {
+    background: #ff3c38;
+    color: #fff;
+  }
+
+  /* Card Enhancements */
+  .fw-black {
+    font-weight: 900;
+  }
+  .italic {
+    font-style: italic;
+  }
+
+  .product-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .pro-label {
+    position: absolute;
+    top: 15px;
+    right: -30px;
+    background: #ff3c38;
+    color: white;
+    padding: 5px 35px;
+    transform: rotate(45deg);
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    z-index: 5;
+  }
+
+  .category-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #ff3c38;
+    letter-spacing: 1px;
+  }
+
+  .hover-red:hover {
+    color: #ff3c38 !important;
+  }
+</style>
+{% endblock %}

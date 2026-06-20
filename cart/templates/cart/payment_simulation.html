@@ -1,0 +1,51 @@
+{% extends "products/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0" style="border-radius: 20px;">
+                <div class="card-body p-5">
+                    <h3 class="text-center fw-bold mb-4">Secure Payment</h3>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="text-muted">Order Total:</span>
+                        <span class="fw-bold text-primary">${{ order.total_price }}</span>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">CARDHOLDER NAME</label>
+                            <input type="text" class="form-control bg-light" placeholder="John Doe" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">CARD NUMBER</label>
+                            <input type="text" class="form-control bg-light" placeholder="**** **** **** 1234" maxlength="16" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">EXPIRY</label>
+                                <input type="text" class="form-control bg-light" placeholder="MM/YY" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold">CVV</label>
+                                <input type="password" class="form-control bg-light" placeholder="***" maxlength="3" required>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                                Pay ${{ order.total_price }}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width="60" class="me-2" alt="PayPal">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" width="40" alt="Visa">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

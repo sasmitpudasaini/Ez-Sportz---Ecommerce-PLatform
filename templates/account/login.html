@@ -1,0 +1,187 @@
+{% extends "products/base.html" %} {% block content %}
+<div
+  class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+  style="
+    background:
+      linear-gradient(rgba(18, 18, 18, 0.9), rgba(18, 18, 18, 0.9)),
+      url(&quot;https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&quot;)
+        center/cover;
+    padding: 40px 0;
+  "
+>
+  <div class="row justify-content-center w-100">
+    <div class="col-md-5 col-lg-4">
+      <div
+        class="card border-0 shadow-lg"
+        style="border-radius: 0; background: #fff; transform: skewY(-1deg)"
+      >
+        <div class="d-flex" style="height: 10px">
+          <div style="flex: 3; background: #ff3c38"></div>
+          <div style="flex: 1; background: #121212"></div>
+          <div style="flex: 1; background: #ff3c38"></div>
+        </div>
+
+        <div class="card-body p-5" style="transform: skewY(1deg)">
+          <div class="text-center mb-5">
+            <div
+              class="badge bg-dark mb-2 px-3 py-2 text-uppercase"
+              style="letter-spacing: 3px; font-size: 0.6rem"
+            >
+              Official Storefront
+            </div>
+            <h1
+              class="fw-black italic text-uppercase m-0"
+              style="font-size: 2.5rem; line-height: 1"
+            >
+              PLAYER <span style="color: #ff3c38">LOGIN</span>
+            </h1>
+            <div
+              class="mt-2"
+              style="
+                height: 2px;
+                width: 50px;
+                background: #ff3c38;
+                margin: 0 auto;
+              "
+            ></div>
+          </div>
+
+          <form
+            method="POST"
+            action="{% url 'account_login' %}"
+            class="ez-sports-form"
+          >
+            {% csrf_token %}
+
+            <div class="sport-input-fields">{{ form.as_p }}</div>
+
+            {% if redirect_field_value %}
+            <input
+              type="hidden"
+              name="{{ redirect_field_name }}"
+              value="{{ redirect_field_value }}"
+            />
+            {% endif %}
+
+            <button
+              class="btn btn-dark w-100 mt-4 position-relative overflow-hidden group"
+              type="submit"
+              style="
+                border-radius: 0;
+                padding: 18px;
+                border: none;
+                background: #121212;
+              "
+            >
+              <span
+                class="position-relative"
+                style="
+                  z-index: 2;
+                  font-weight: 900;
+                  letter-spacing: 2px;
+                  text-transform: uppercase;
+                "
+              >
+                Access Your Gear <i class="bi bi-chevron-right ms-2"></i>
+              </span>
+              <div class="btn-hover-bg"></div>
+            </button>
+          </form>
+
+          <div class="mt-5 pt-4 border-top text-center">
+            <p class="small fw-bold text-muted text-uppercase mb-2">
+              New to the team?
+            </p>
+            <a
+              href="{% url 'account_signup' %}"
+              class="btn btn-outline-danger w-100 fw-black text-uppercase p-2"
+              style="border-radius: 0; font-size: 0.8rem; border-width: 2px"
+            >
+              Claim Your Jersey (Sign Up)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a
+          href="/"
+          class="text-white-50 small text-decoration-none text-uppercase fw-bold tracking-widest"
+        >
+          <i class="bi bi-house-door"></i> Return to Main Deck
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Sports-Shop UI Specifics */
+  .fw-black {
+    font-weight: 900;
+  }
+  .italic {
+    font-style: italic;
+  }
+
+  /* Custom Form Layout for Sports Feel */
+  .ez-sports-form p {
+    position: relative;
+    margin-bottom: 1.8rem;
+  }
+
+  .ez-sports-form label {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #121212;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .ez-sports-form input {
+    border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 3px solid #e0e0e0 !important;
+    background: #f9f9f9 !important;
+    padding: 15px !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .ez-sports-form input:focus {
+    background: #fff !important;
+    border-bottom-color: #ff3c38 !important;
+    box-shadow: none !important;
+    transform: translateX(5px);
+  }
+
+  /* Button Animation */
+  .btn-hover-bg {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #ff3c38;
+    transition: all 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+    z-index: 1;
+  }
+
+  .btn:hover .btn-hover-bg {
+    left: 0;
+  }
+
+  /* Handling Django Error Lists */
+  .errorlist {
+    list-style: none;
+    padding: 0;
+    color: #ff3c38;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+</style>
+{% endblock %}

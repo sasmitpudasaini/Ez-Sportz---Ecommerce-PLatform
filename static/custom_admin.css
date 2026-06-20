@@ -1,0 +1,16 @@
+/* Custom Tech Hive Admin Styling */
+:root {
+    --primary: #0d6efd; /* Your Tech Hive Blue */
+    --dark: #1a1a1a;
+}
+
+#header { background: var(--dark) !important; border-bottom: 3px solid var(--primary) !important; }
+.module h2, .caption { background: var(--primary) !important; }
+div.breadcrumbs { background: #333 !important; }
+
+/* Styling the status dropdown to stand out */
+select[name$="-status"], .field-status select {
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 2px;
+}

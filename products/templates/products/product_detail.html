@@ -1,0 +1,191 @@
+{% extends "products/base.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="row gx-lg-5">
+    <div class="col-md-6 mb-4">
+      {% if product.image %}
+      <div class="p-4 bg-white rounded shadow-sm border border-light">
+        <img
+          src="{{ product.image.url }}"
+          class="img-fluid"
+          alt="{{ product.name }}"
+          style="width: 100%; height: auto; object-fit: contain"
+        />
+      </div>
+      {% else %}
+      <div
+        class="bg-light d-flex align-items-center justify-content-center rounded border"
+        style="height: 450px"
+      >
+        <span class="text-muted text-uppercase fw-bold">Image Coming Soon</span>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <nav aria-label="breadcrumb">
+        <ol
+          class="breadcrumb"
+          style="
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          "
+        >
+          <li class="breadcrumb-item">
+            <a href="/" class="text-decoration-none text-danger fw-bold"
+              >Home</a
+            >
+          </li>
+          <li class="breadcrumb-item active text-muted">{{ product.name }}</li>
+        </ol>
+      </nav>
+
+      <h1
+        class="display-5 fw-black text-uppercase italic mb-1"
+        style="font-weight: 900; font-style: italic"
+      >
+        {{ product.name }}
+      </h1>
+
+      <div class="mb-3">
+        <span
+          class="badge bg-dark rounded-0 px-3 py-2 text-uppercase"
+          style="font-size: 0.75rem"
+          >{{ product.category }}</span
+        >
+        {% if product.is_featured %}
+        <span class="badge bg-danger rounded-0 px-3 py-2 text-uppercase"
+          ><i class="bi bi-lightning-fill"></i> Pro Choice</span
+        >
+        {% endif %}
+      </div>
+
+      <h2 class="fw-bold mb-4" style="color: #121212; font-size: 2.5rem">
+        ${{ product.price }}
+      </h2>
+
+      <p
+        class="lead text-muted border-start border-4 border-danger ps-3 mb-4"
+        style="font-size: 1.1rem"
+      >
+        {{ product.description }}
+      </p>
+
+      <hr class="my-4" />
+
+      <div class="d-flex align-items-center mb-4">
+        <div class="me-4">
+          <p class="small text-secondary text-uppercase fw-bold mb-0">
+            Availability
+          </p>
+          <p class="text-success fw-bold mb-0">
+            <i class="bi bi-check-circle-fill"></i> READY FOR ACTION
+          </p>
+        </div>
+        <div>
+          <p class="small text-secondary text-uppercase fw-bold mb-0">
+            Shipping
+          </p>
+          <p class="text-dark fw-bold mb-0">FREE DELIVERY</p>
+        </div>
+      </div>
+
+      <div class="d-grid gap-3 mt-4">
+        {% if user.is_authenticated %}
+        <a
+          href="{% url 'cart:add_to_cart' product.id %}"
+          class="btn btn-outline-dark btn-lg py-3 fw-bold text-uppercase"
+          style="border-width: 2px"
+        >
+          <i class="bi bi-cart-plus-fill me-2"></i> Add to Basket
+        </a>
+        <button
+          class="btn btn-danger btn-lg py-3 fw-bold text-uppercase shadow-sm"
+        >
+          Grab It Now
+        </button>
+        {% else %}
+        <a
+          href="{% url 'cart:add_to_cart' product.id %}"
+          class="btn btn-outline-dark btn-lg py-3 fw-bold text-uppercase"
+          style="border-width: 2px"
+        >
+          <i class="bi bi-cart-plus-fill me-2"></i> Add to Basket
+        </a>
+        <a
+          href="{% url 'account_login' %}?next={{ request.path }}"
+          class="btn btn-danger btn-lg py-3 fw-bold text-uppercase"
+        >
+          Login to Buy
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5 pt-5">
+    <div class="d-flex align-items-center mb-4">
+      <h3
+        class="fw-black text-uppercase italic mb-0"
+        style="font-weight: 900; font-style: italic"
+      >
+        Complete Your Kit
+      </h3>
+      <div
+        class="ms-3 flex-grow-1 border-bottom border-2 border-danger"
+        style="opacity: 0.2"
+      ></div>
+    </div>
+
+    <div class="row">
+      {% for related in related_products %}
+      <div class="col-md-3 mb-4">
+        <div class="card h-100 border-0 shadow-sm related-card">
+          <a href="{% url 'product_detail' related.pk %}">
+            {% if related.image %}
+            <img
+              src="{{ related.image.url }}"
+              class="card-img-top p-3"
+              alt="{{ related.name }}"
+              style="height: 180px; object-fit: contain"
+            />
+            {% else %}
+            <div class="bg-light text-center py-5" style="height: 180px">
+              No Image
+            </div>
+            {% endif %}
+          </a>
+          <div class="card-body">
+            <h6 class="fw-bold text-uppercase mb-1" style="font-size: 0.9rem">
+              <a
+                href="{% url 'product_detail' related.pk %}"
+                class="text-decoration-none text-dark"
+                >{{ related.name }}</a
+              >
+            </h6>
+            <p class="text-danger fw-bold mb-0">${{ related.price }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .fw-black {
+    font-weight: 900;
+  }
+  .italic {
+    font-style: italic;
+  }
+  .related-card {
+    transition: all 0.2s ease-in-out;
+    border-bottom: 3px solid transparent !important;
+  }
+  .related-card:hover {
+    transform: translateY(-5px);
+    border-bottom: 3px solid #ff3c38 !important;
+  }
+</style>
+{% endblock %}
